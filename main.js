@@ -1,8 +1,21 @@
 const TelegramBot = require('node-telegram-bot-api');
+const express = require('express');
 const fs = require('fs');
 const path = require('path');
 
-// सीधे कोड में टोकन सेट किया गया है
+// Express Server Setup (Render के लिए ताकि port open रहे और warning न آئے)
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.get('/', (req, res) => {
+  res.send('AK Telegram Bot is running live!');
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is listening on port ${PORT}`);
+});
+
+// Telegram Bot Setup
 const token = '8785933749:AAFiNePd4vMQIZMifTZIiRb9KxowA4Kng7E';
 const bot = new TelegramBot(token, { polling: true });
 
@@ -357,7 +370,6 @@ bot.onText(/\/unban (.+)/, async (msg, match) => {
   }
 });
 
-// नया फीचर: /removewarn (सिर्फ एडमिन और ओनर के लिए)
 bot.onText(/\/removewarn(.*)/, async (msg, match) => {
   const chatId = msg.chat.id;
   const adminId = msg.from.id;
@@ -376,10 +388,9 @@ bot.onText(/\/removewarn(.*)/, async (msg, match) => {
   }
 
   if (!targetUserId) {
-    return bot.sendMessage(chatId, '⚠️ Please reply to a user\'s message with `/removewarn` or provide their User ID (`/removewarn 123456789`).');
+    return bot.sendMessage(chatId, '⚠️ Please reply to a user\'s message with `/removewarn` or provide their User ID.');
   }
 
-  // वार्निंग्स को रीसेट/रोल-बैक करके 0 कर दें
   if (userViolations[targetUserId]) {
     delete userViolations[targetUserId];
   }
@@ -387,4 +398,4 @@ bot.onText(/\/removewarn(.*)/, async (msg, match) => {
   bot.sendMessage(chatId, `✨ All warnings and penalties have been successfully cleared for user ID \`${targetUserId}\` by admin!`, { parse_mode: 'Markdown' });
 });
 
-console.log('🚀 AK Telegram Bot is up and running with /removewarn feature!');
+console.log('🚀 AK Telegram Bot is up and running smoothly!');
