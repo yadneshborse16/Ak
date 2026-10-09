@@ -1,0 +1,12 @@
+{
+  "name": "ak-telegram-bot",
+  "version": "1.0.0",
+  "description": "AK Telegram Bot with auto moderation and custom filters",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "dependencies": {
+    "node-telegram-bot-api": "^0.65.1"
+  }
+}
